@@ -16,9 +16,11 @@
             --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
             --toggle-bg: #e0e0e0;
             --toggle-knob: #ffffff;
-            --toggle-icon: "☀️";
             --input-bg: #f9f9f9;
             --header-bg: rgba(255, 255, 255, 0.8);
+            --copy-btn: #007aff;
+            --copy-btn-hover: #005ecb;
+            --copied-bg: #34c759;
         }
 
         :root[data-theme="dark"] {
@@ -31,9 +33,11 @@
             --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.5);
             --toggle-bg: #4a4a6a;
             --toggle-knob: #1a1a2e;
-            --toggle-icon: "🌙";
             --input-bg: #1a1a3e;
             --header-bg: rgba(26, 26, 46, 0.85);
+            --copy-btn: #0a84ff;
+            --copy-btn-hover: #409cff;
+            --copied-bg: #30d158;
         }
 
         /* ===== Reset & Base ===== */
@@ -118,22 +122,18 @@
             transform: translateX(26px);
         }
 
-        .toggle-icon {
-            font-size: 1.1rem;
-            transition: opacity 0.3s;
-        }
-
-        /* ===== Gallery Grid ===== */
+        /* ===== Gallery Grid - FIXED 3 columns × 6 rows ===== */
         .gallery-container {
-            max-width: 1400px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 40px 30px;
         }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(6, auto);
+            gap: 28px;
         }
 
         /* ===== Card ===== */
@@ -154,7 +154,7 @@
         .card-image-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 100%; /* 1:1 aspect ratio */
+            padding-top: 100%;
             overflow: hidden;
             background: var(--border-color);
         }
@@ -173,8 +173,7 @@
             transform: scale(1.05);
         }
 
-        /* Placeholder when no image */
-        .card-image-wrapper .placeholder {
+        .placeholder {
             position: absolute;
             top: 0;
             left: 0;
@@ -185,43 +184,97 @@
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             gap: 8px;
         }
 
         .placeholder-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             opacity: 0.4;
         }
 
+        /* ===== Card Body - Copyable Text ===== */
         .card-body {
             padding: 14px;
         }
 
-        .card-body textarea {
-            width: 100%;
-            min-height: 60px;
+        .text-container {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .card-text {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 10px 12px;
-            font-family: inherit;
-            font-size: 0.85rem;
-            color: var(--text-primary);
-            background: var(--input-bg);
-            resize: vertical;
-            transition: border-color 0.3s ease, background 0.3s ease,
-                        color 0.3s ease, box-shadow 0.3s ease;
-            line-height: 1.5;
+            user-select: text;
+            cursor: text;
+            word-wrap: break-word;
+            min-height: 42px;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
 
-        .card-body textarea::placeholder {
-            color: var(--text-secondary);
+        .copy-btn {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: var(--copy-btn);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.15s ease;
+            font-size: 1rem;
+            position: relative;
         }
 
-        .card-body textarea:focus {
-            outline: none;
-            border-color: #007aff;
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+        .copy-btn:hover {
+            background: var(--copy-btn-hover);
+            transform: scale(1.05);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: var(--copied-bg);
+        }
+
+        .copy-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
         }
 
         /* ===== Footer ===== */
@@ -235,39 +288,50 @@
         }
 
         /* ===== Responsive ===== */
-        @media (max-width: 1200px) {
-            .gallery-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             .gallery-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 16px;
             }
             .gallery-container {
-                padding: 24px 20px;
+                padding: 20px 12px;
             }
-        }
-
-        @media (max-width: 600px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
+            .card-text {
+                font-size: 0.78rem;
+                padding: 8px 10px;
+            }
+            .copy-btn {
+                width: 32px;
+                height: 32px;
+            }
+            .copy-icon {
+                width: 14px;
+                height: 14px;
             }
             .header {
-                padding: 14px 20px;
+                padding: 12px 16px;
             }
             .header h1 {
                 font-size: 1.2rem;
             }
+        }
+
+        @media (max-width: 500px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                min-width: 450px;
+            }
             .gallery-container {
-                padding: 16px 12px;
+                overflow-x: auto;
+                padding: 12px 8px;
             }
             .card-body {
-                padding: 10px;
+                padding: 8px;
+            }
+            .card-text {
+                font-size: 0.7rem;
+                padding: 6px 8px;
             }
         }
     </style>
@@ -287,39 +351,59 @@
     <!-- Gallery -->
     <main class="gallery-container">
         <div class="gallery-grid" id="galleryGrid">
-            <!-- Cards will be injected by JavaScript -->
+            <!-- 18 cards (3 columns × 6 rows) injected by JS -->
         </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Image Gallery &mdash; 3 &times; 6 Grid Layout</p>
+        <p>Image Gallery &mdash; 3 Columns &times; 6 Rows</p>
     </footer>
 
     <script>
-        // ===== Sample image data (using picsum.photos for demo) =====
+        // ===== Gallery Data: 18 items (3 cols × 6 rows) =====
         const galleryItems = [
-            { img: "https://picsum.photos/seed/a1/400/400", text: "Mountain sunrise" },
-            { img: "https://picsum.photos/seed/b2/400/400", text: "Ocean waves" },
-            { img: "https://picsum.photos/seed/c3/400/400", text: "City lights" },
-            { img: "https://picsum.photos/seed/d4/400/400", text: "Forest path" },
-            { img: "https://picsum.photos/seed/e5/400/400", text: "Desert dunes" },
-            { img: "https://picsum.photos/seed/f6/400/400", text: "Snowy peaks" },
-            { img: "https://picsum.photos/seed/g7/400/400", text: "Autumn leaves" },
-            { img: "https://picsum.photos/seed/h8/400/400", text: "Starry night" },
-            { img: "https://picsum.photos/seed/i9/400/400", text: "Lakeside calm" },
-            { img: "https://picsum.photos/seed/j10/400/400", text: "Wildflowers" },
-            { img: "https://picsum.photos/seed/k11/400/400", text: "Rocky shore" },
-            { img: "https://picsum.photos/seed/l12/400/400", text: "Golden hour" },
-            { img: "https://picsum.photos/seed/m13/400/400", text: "Misty morning" },
-            { img: "https://picsum.photos/seed/n14/400/400", text: "Tropical beach" },
-            { img: "https://picsum.photos/seed/o15/400/400", text: "Rolling hills" },
-            { img: "https://picsum.photos/seed/p16/400/400", text: "Canyon view" },
-            { img: "https://picsum.photos/seed/q17/400/400", text: "Rainy street" },
-            { img: "https://picsum.photos/seed/r18/400/400", text: "Sunset glow" },
+            // Row 1
+            { img: "https://picsum.photos/seed/a1/400/400",  text: "Mountain sunrise over the valley" },
+            { img: "https://picsum.photos/seed/b2/400/400",  text: "Ocean waves crashing on rocks" },
+            { img: "https://picsum.photos/seed/c3/400/400",  text: "City lights at midnight" },
+            // Row 2
+            { img: "https://picsum.photos/seed/d4/400/400",  text: "Quiet forest path in autumn" },
+            { img: "https://picsum.photos/seed/e5/400/400",  text: "Golden desert sand dunes" },
+            { img: "https://picsum.photos/seed/f6/400/400",  text: "Snow-capped mountain peaks" },
+            // Row 3
+            { img: "https://picsum.photos/seed/g7/400/400",  text: "Colorful autumn leaves falling" },
+            { img: "https://picsum.photos/seed/h8/400/400",  text: "Starry night sky view" },
+            { img: "https://picsum.photos/seed/i9/400/400",  text: "Calm lakeside reflection" },
+            // Row 4
+            { img: "https://picsum.photos/seed/j10/400/400", text: "Field of wild flowers" },
+            { img: "https://picsum.photos/seed/k11/400/400", text: "Rocky shoreline at dawn" },
+            { img: "https://picsum.photos/seed/l12/400/400", text: "Golden hour portrait light" },
+            // Row 5
+            { img: "https://picsum.photos/seed/m13/400/400", text: "Misty morning in the hills" },
+            { img: "https://picsum.photos/seed/n14/400/400", text: "Tropical beach paradise" },
+            { img: "https://picsum.photos/seed/o15/400/400", text: "Green rolling hillside" },
+            // Row 6
+            { img: "https://picsum.photos/seed/p16/400/400", text: "Deep canyon overlook" },
+            { img: "https://picsum.photos/seed/q17/400/400", text: "Rainy city street scene" },
+            { img: "https://picsum.photos/seed/r18/400/400", text: "Warm sunset glow horizon" },
         ];
 
-        // ===== Build the gallery =====
+        // ===== SVG Icons =====
+        const copyIconSVG = `
+            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>`;
+
+        const checkIconSVG = `
+            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>`;
+
+        // ===== Build Gallery =====
         function renderGallery() {
             const grid = document.getElementById('galleryGrid');
             grid.innerHTML = '';
@@ -338,14 +422,46 @@
                         }
                     </div>
                     <div class="card-body">
-                        <textarea
-                            placeholder="Add a description..."
-                            rows="2"
-                        >${item.text || ''}</textarea>
+                        <div class="text-container">
+                            <div class="card-text" id="text-${index}">${item.text}</div>
+                            <button class="copy-btn" onclick="copyText(${index}, this)" aria-label="Copy text">
+                                ${copyIconSVG}
+                                <span class="copy-tooltip">Copy</span>
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // ===== Copy to Clipboard =====
+        function copyText(index, btn) {
+            const textEl = document.getElementById(`text-${index}`);
+            const text = textEl.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showCopied(btn);
+            }).catch(() => {
+                // Fallback
+                const range = document.createRange();
+                range.selectNodeContents(textEl);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand('copy');
+                selection.removeAllRanges();
+                showCopied(btn);
+            });
+        }
+
+        function showCopied(btn) {
+            btn.classList.add('copied');
+            btn.innerHTML = `${checkIconSVG}<span class="copy-tooltip show">Copied!</span>`;
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `${copyIconSVG}<span class="copy-tooltip">Copy</span>`;
+            }, 2000);
         }
 
         // ===== Theme Toggle =====
@@ -364,11 +480,10 @@
             }
         }
 
-        // ===== Load saved theme =====
+        // ===== Load Saved Theme =====
         function loadTheme() {
             const saved = localStorage.getItem('theme');
             const icon = document.getElementById('themeIcon');
-
             if (saved === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 icon.textContent = '🌙';
