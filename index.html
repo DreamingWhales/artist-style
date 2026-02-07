@@ -21,6 +21,9 @@
             --copy-btn: #007aff;
             --copy-btn-hover: #005ecb;
             --copied-bg: #34c759;
+            --desc-bg: #ffffff;
+            --footer-bg: #ffffff;
+            --accent: #007aff;
         }
 
         :root[data-theme="dark"] {
@@ -38,6 +41,9 @@
             --copy-btn: #0a84ff;
             --copy-btn-hover: #409cff;
             --copied-bg: #30d158;
+            --desc-bg: #16213e;
+            --footer-bg: #16213e;
+            --accent: #0a84ff;
         }
 
         /* ===== Reset & Base ===== */
@@ -53,6 +59,8 @@
             color: var(--text-primary);
             transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* ===== Header ===== */
@@ -115,20 +123,71 @@
             border-radius: 50%;
             left: 3px;
             transition: transform 0.3s ease, background 0.3s ease;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
 
         :root[data-theme="dark"] .toggle-switch::after {
             transform: translateX(26px);
         }
 
-        /* ===== Gallery Grid - FIXED 3 columns × 6 rows ===== */
-        .gallery-container {
+        /* ===== Main Content ===== */
+        .main-content {
+            flex: 1;
             max-width: 1100px;
             margin: 0 auto;
             padding: 40px 30px;
+            width: 100%;
         }
 
+        /* ===== Description Box ===== */
+        .description-box {
+            background: var(--desc-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px 36px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .description-box h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .description-box p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .description-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .description-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 14px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border-radius: 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        /* ===== Gallery Grid - 3 columns × 6 rows ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -143,7 +202,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease,
-                        background-color 0.3s ease;
+                background-color 0.3s ease;
         }
 
         .card:hover {
@@ -151,10 +210,11 @@
             box-shadow: var(--shadow-hover);
         }
 
+        /* ===== Image Wrapper - 768×1280 (9:16 ratio) ===== */
         .card-image-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 100%;
+            padding-top: 166.67%; /* 1280/768 = 1.6667 → 166.67% */
             overflow: hidden;
             background: var(--border-color);
         }
@@ -193,7 +253,7 @@
             opacity: 0.4;
         }
 
-        /* ===== Card Body - Copyable Text ===== */
+        /* ===== Card Body - Centered Copyable Text ===== */
         .card-body {
             padding: 14px;
         }
@@ -201,7 +261,7 @@
         .text-container {
             position: relative;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 8px;
         }
 
@@ -218,6 +278,10 @@
             cursor: text;
             word-wrap: break-word;
             min-height: 42px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
 
@@ -279,12 +343,89 @@
 
         /* ===== Footer ===== */
         .footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
+            background: var(--footer-bg);
             border-top: 1px solid var(--border-color);
-            margin-top: 20px;
+            padding: 40px 30px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            letter-spacing: -0.2px;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 6px;
+        }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 24px;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-socials a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s, transform 0.2s, border-color 0.2s;
+        }
+
+        .footer-socials a:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+            border-color: var(--accent);
         }
 
         /* ===== Responsive ===== */
@@ -293,8 +434,18 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 16px;
             }
-            .gallery-container {
+            .main-content {
                 padding: 20px 12px;
+            }
+            .description-box {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+            .description-box h2 {
+                font-size: 1.15rem;
+            }
+            .description-box p {
+                font-size: 0.85rem;
             }
             .card-text {
                 font-size: 0.78rem;
@@ -314,6 +465,13 @@
             .header h1 {
                 font-size: 1.2rem;
             }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .footer {
+                padding: 30px 20px;
+            }
         }
 
         @media (max-width: 500px) {
@@ -322,7 +480,7 @@
                 gap: 10px;
                 min-width: 450px;
             }
-            .gallery-container {
+            .main-content {
                 overflow-x: auto;
                 padding: 12px 8px;
             }
@@ -332,6 +490,10 @@
             .card-text {
                 font-size: 0.7rem;
                 padding: 6px 8px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -348,45 +510,115 @@
         </div>
     </header>
 
-    <!-- Gallery -->
-    <main class="gallery-container">
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Description Box -->
+        <section class="description-box">
+            <h2>🎨 Welcome to the Gallery</h2>
+            <p>
+                Browse through our curated collection of stunning images displayed
+                in a 3-column by 6-row grid layout. Each image is presented in a
+                768 × 1280 portrait format, perfect for mobile wallpapers and
+                vertical displays.
+            </p>
+            <p>
+                Click the copy button next to any text to quickly copy the
+                description to your clipboard. Toggle between light and dark
+                mode using the switch in the header.
+            </p>
+            <div class="description-tags">
+                <span class="tag">📐 768 × 1280</span>
+                <span class="tag">🖼️ 18 Images</span>
+                <span class="tag">📋 Copyable Text</span>
+                <span class="tag">🌗 Dark Mode</span>
+                <span class="tag">📱 Responsive</span>
+            </div>
+        </section>
+
+        <!-- Gallery Grid -->
         <div class="gallery-grid" id="galleryGrid">
             <!-- 18 cards (3 columns × 6 rows) injected by JS -->
         </div>
+
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Image Gallery &mdash; 3 Columns &times; 6 Rows</p>
+        <div class="footer-content">
+            <!-- Column 1 -->
+            <div class="footer-section">
+                <h3>📷 Gallery</h3>
+                <p>
+                    A clean and minimal image gallery built with HTML, CSS,
+                    and JavaScript. Featuring dark mode, copyable text,
+                    and a responsive grid layout.
+                </p>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="footer-section">
+                <h3>Info</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Image Resolution: 768 × 1280</a></li>
+                    <li><a href="#">Layout: 3 Cols × 6 Rows</a></li>
+                    <li><a href="#">Total Images: 18</a></li>
+                    <li><a href="#">Theme: Light / Dark</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 Image Gallery. All rights reserved.</p>
+            <div class="footer-socials">
+                <a href="#" aria-label="GitHub">🐙</a>
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="Email">✉️</a>
+                <a href="#" aria-label="Website">🌐</a>
+            </div>
+        </div>
     </footer>
 
     <script>
         // ===== Gallery Data: 18 items (3 cols × 6 rows) =====
+        // Using 768x1280 resolution images
         const galleryItems = [
             // Row 1
-            { img: "https://picsum.photos/seed/a1/400/400",  text: "Mountain sunrise over the valley" },
-            { img: "https://picsum.photos/seed/b2/400/400",  text: "Ocean waves crashing on rocks" },
-            { img: "https://picsum.photos/seed/c3/400/400",  text: "City lights at midnight" },
+            { img: "https://picsum.photos/seed/a1/768/1280",  text: "Mountain sunrise over the valley" },
+            { img: "https://picsum.photos/seed/b2/768/1280",  text: "Ocean waves crashing on rocks" },
+            { img: "https://picsum.photos/seed/c3/768/1280",  text: "City lights at midnight" },
             // Row 2
-            { img: "https://picsum.photos/seed/d4/400/400",  text: "Quiet forest path in autumn" },
-            { img: "https://picsum.photos/seed/e5/400/400",  text: "Golden desert sand dunes" },
-            { img: "https://picsum.photos/seed/f6/400/400",  text: "Snow-capped mountain peaks" },
+            { img: "https://picsum.photos/seed/d4/768/1280",  text: "Quiet forest path in autumn" },
+            { img: "https://picsum.photos/seed/e5/768/1280",  text: "Golden desert sand dunes" },
+            { img: "https://picsum.photos/seed/f6/768/1280",  text: "Snow-capped mountain peaks" },
             // Row 3
-            { img: "https://picsum.photos/seed/g7/400/400",  text: "Colorful autumn leaves falling" },
-            { img: "https://picsum.photos/seed/h8/400/400",  text: "Starry night sky view" },
-            { img: "https://picsum.photos/seed/i9/400/400",  text: "Calm lakeside reflection" },
+            { img: "https://picsum.photos/seed/g7/768/1280",  text: "Colorful autumn leaves falling" },
+            { img: "https://picsum.photos/seed/h8/768/1280",  text: "Starry night sky view" },
+            { img: "https://picsum.photos/seed/i9/768/1280",  text: "Calm lakeside reflection" },
             // Row 4
-            { img: "https://picsum.photos/seed/j10/400/400", text: "Field of wild flowers" },
-            { img: "https://picsum.photos/seed/k11/400/400", text: "Rocky shoreline at dawn" },
-            { img: "https://picsum.photos/seed/l12/400/400", text: "Golden hour portrait light" },
+            { img: "https://picsum.photos/seed/j10/768/1280", text: "Field of wild flowers" },
+            { img: "https://picsum.photos/seed/k11/768/1280", text: "Rocky shoreline at dawn" },
+            { img: "https://picsum.photos/seed/l12/768/1280", text: "Golden hour portrait light" },
             // Row 5
-            { img: "https://picsum.photos/seed/m13/400/400", text: "Misty morning in the hills" },
-            { img: "https://picsum.photos/seed/n14/400/400", text: "Tropical beach paradise" },
-            { img: "https://picsum.photos/seed/o15/400/400", text: "Green rolling hillside" },
+            { img: "https://picsum.photos/seed/m13/768/1280", text: "Misty morning in the hills" },
+            { img: "https://picsum.photos/seed/n14/768/1280", text: "Tropical beach paradise" },
+            { img: "https://picsum.photos/seed/o15/768/1280", text: "Green rolling hillside" },
             // Row 6
-            { img: "https://picsum.photos/seed/p16/400/400", text: "Deep canyon overlook" },
-            { img: "https://picsum.photos/seed/q17/400/400", text: "Rainy city street scene" },
-            { img: "https://picsum.photos/seed/r18/400/400", text: "Warm sunset glow horizon" },
+            { img: "https://picsum.photos/seed/p16/768/1280", text: "Deep canyon overlook" },
+            { img: "https://picsum.photos/seed/q17/768/1280", text: "Rainy city street scene" },
+            { img: "https://picsum.photos/seed/r18/768/1280", text: "Warm sunset glow horizon" },
         ];
 
         // ===== SVG Icons =====
@@ -443,7 +675,6 @@
             navigator.clipboard.writeText(text).then(() => {
                 showCopied(btn);
             }).catch(() => {
-                // Fallback
                 const range = document.createRange();
                 range.selectNodeContents(textEl);
                 const selection = window.getSelection();
